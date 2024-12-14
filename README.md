@@ -7,7 +7,7 @@ Flask
 > Playlist on server will not last forever.
 > It will automatically be deleted when every device have this playlist and are up to date.
 ## Application
-Electron + React + Bootstrap
+Tauri + React + Bootstrap
 
 * HomePage
     * list selector
