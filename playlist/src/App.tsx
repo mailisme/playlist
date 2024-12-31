@@ -1,33 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useRef, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [filename, setFilename] = useState("")
+  const [duration, setDuration] = useState(0)
+
+  const inputRef  = useRef<HTMLInputElement>(null);
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files) return;
+
+    const file = files[0];
+
+    const audioCtx = new window.AudioContext()
+    const audio: AudioBuffer = await audioCtx.decodeAudioData(await file.arrayBuffer())
+
+    setFilename(file.name)
+    setDuration(audio.duration)
+  }
+
+  function handleButtonClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    if (!inputRef || !inputRef.current) return;
+
+    inputRef.current.click();
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container">
+        <h1 className="title">Playlist</h1>
+        <div className="bottom">
+          <button className="add-song" onClick={handleButtonClick}>Add Song</button>
+        </div>
+        <h2>filename: {filename} duration: {Math.round(duration)}</h2>
+        <input ref={inputRef} type='file' hidden onChange={handleFileUpload}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
