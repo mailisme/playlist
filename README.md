@@ -29,3 +29,4 @@ Tauri + React + Tailwind
             * getList(UUID)
             * if there is new music > downloadMusic()
             * if some music was removed > deleteMusic()
+
